@@ -1,6 +1,7 @@
 package org.team4.hanzip.global.api;
 
-import org.team4.hanzip.global.api.code.ResultCode;
+import org.team4.hanzip.global.api.code.ErrorResultCode;
+import org.team4.hanzip.global.api.code.SuccessResultCode;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -11,7 +12,7 @@ public record ApiResponse<T>(
 		@JsonInclude(value = JsonInclude.Include.NON_NULL)
 		T data
 ) {
-	public static <T> ApiResponse<T> success(ResultCode successCode, T data) {
+	public static <T> ApiResponse<T> success(SuccessResultCode successCode, T data) {
 		return new ApiResponse<>(
 				successCode.isSuccess(),
 				successCode.getStatus().value(),
@@ -19,11 +20,11 @@ public record ApiResponse<T>(
 				data);
 	}
 
-	public static <T> ApiResponse<T> success(ResultCode successCode) {
+	public static <T> ApiResponse<T> success(SuccessResultCode successCode) {
 		return success(successCode, null);
 	}
 
-	public static <T> ApiResponse<T> failure(ResultCode errorCode) {
+	public static <T> ApiResponse<T> failure(ErrorResultCode errorCode) {
 		return new ApiResponse<>(
 				errorCode.isSuccess(),
 				errorCode.getStatus().value(),
