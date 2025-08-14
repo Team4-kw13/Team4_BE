@@ -5,6 +5,6 @@ import org.team4.hanzip.global.exception.common.CommonException;
 
 public class MemberNotFoundException extends CommonException {
 	public MemberNotFoundException() {
-		super(ErrorCode.NOT_EXISTENT_MEMBER);
+		super(ErrorCode.MEMBER_NOT_FOUND);
 	}
 }

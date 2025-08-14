@@ -32,6 +32,6 @@ public class CommonExceptionHandler extends BaseExceptionHandler {
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	protected ResponseEntity<ApiResponse<Void>> handleMissingServletRequestParameterException(
 			MissingServletRequestParameterException e) {
-		return buildErrorResponse(ErrorCode.REQUIRED_ARGS_NOT_FOUND);
+		return buildErrorResponse(ErrorCode.MISSING_REQUIRED_PARAMETER);
 	}
 }
