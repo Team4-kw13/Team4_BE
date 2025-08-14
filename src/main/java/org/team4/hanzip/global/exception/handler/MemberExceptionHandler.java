@@ -11,11 +11,11 @@ import org.team4.hanzip.global.exception.member.MemberNotFoundException;
 public class MemberExceptionHandler extends BaseExceptionHandler {
 	@ExceptionHandler(MemberNotFoundException.class)
 	protected ResponseEntity<ApiResponse<Void>> handleMemberNotFoundException(MemberNotFoundException e) {
-		return buildErrorResponse(e.getResultCode());
+		return buildErrorResponse(e.getErrorResultCode());
 	}
 
 	@ExceptionHandler(InvalidMemberException.class)
 	protected ResponseEntity<ApiResponse<Void>> handleInvalidMemberException(InvalidMemberException e) {
-		return buildErrorResponse(e.getResultCode());
+		return buildErrorResponse(e.getErrorResultCode());
 	}
 }

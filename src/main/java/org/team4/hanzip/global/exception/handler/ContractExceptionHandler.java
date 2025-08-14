@@ -10,6 +10,6 @@ import org.team4.hanzip.global.exception.contract.ContractNotFoundException;
 public class ContractExceptionHandler extends BaseExceptionHandler {
 	@ExceptionHandler(ContractNotFoundException.class)
 	protected ResponseEntity<ApiResponse<Void>> handleContractNotFoundException(ContractNotFoundException e) {
-		return buildErrorResponse(e.getResultCode());
+		return buildErrorResponse(e.getErrorResultCode());
 	}
 }
