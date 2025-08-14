@@ -23,6 +23,17 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
     private final MemberRepository memberRepository;
 
+    /**
+     * 요청의 Authorization 헤더에서 Bearer JWT 엑세스 토큰을 검사하여 인증 컨텍스트를 설정하고,
+     * 토큰이 없거나 유효하지 않거나 인증된 사용자가 존재하지 않으면 401 JSON 응답을 반환하는 필터 처리.
+     *
+     * 상세:
+     * - Authorization 헤더에서 토큰을 추출하고 jwtProvider로 유효성을 검증한다.
+     * - 유효한 토큰이면 jwtProvider로부터 Authentication을 얻어 SecurityContext에 설정한다.
+     * - 설정된 인증의 principal로부터 memberId를 추출하여 MemberRepository에서 사용자가 존재하는지 확인한다.
+     * - 사용자가 존재하지 않거나 토큰이 없거나 유효하지 않으면 각각의 경우에 맞는 401 응답(JSON 바디 포함)을 클라이언트에 쓰고 필터 처리를 중단한다.
+     * - 모든 검증을 통과하면 filterChain.doFilter(request, response)를 호출하여 요청 처리를 계속 진행한다.
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String accessToken = resolveToken(request);
@@ -65,6 +76,15 @@ public class JwtFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+    /**
+     * 요청 헤더의 Authorization에서 Bearer 토큰을 추출한다.
+     *
+     * 요청의 "Authorization" 헤더가 "Bearer "로 시작하면 접두사 이후의 토큰 문자열을 반환하고,
+     * 그렇지 않으면 null을 반환한다.
+     *
+     * @param request 토큰을 읽을 HTTP 요청
+     * @return Bearer 토큰 문자열 또는 토큰이 없으면 {@code null}
+     */
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
