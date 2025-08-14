@@ -1,9 +1,7 @@
 package org.team4.hanzip.domain.member.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.team4.hanzip.global.entity.BaseTimeEntity;
@@ -16,6 +14,9 @@ public class Member extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nickname;
-    private String logInId;
-    private String logInPassword;
+    @Column(nullable = false, unique = true)
+    private String loginId;
+    @JsonIgnore
+    @Column(nullable = false)
+    private String password;
 }
