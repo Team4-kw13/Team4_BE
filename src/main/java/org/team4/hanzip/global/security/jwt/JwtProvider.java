@@ -81,7 +81,7 @@ public class JwtProvider {
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(accessToken);
-        Long memberId = parseLong(claims.getBody().getId());
+        Long memberId = parseLong(claims.getBody().getSubject());
 
         CustomUserDetails userDetails = new CustomUserDetails(memberId);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
