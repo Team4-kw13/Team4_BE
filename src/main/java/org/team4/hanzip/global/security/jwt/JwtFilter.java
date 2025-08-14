@@ -56,7 +56,7 @@ public class JwtFilter extends GenericFilterBean {
                         {
                             "success": false,
                             "statusCode": "401",
-                            "message": "존재하지 않는 유저입니다. 다시 로그인 해주세요",
+                            "message": "유효하지 않은 또는 누락된 엑세스 토큰입니다. 다시 로그인 해주세요",
                             "data": null
                         }
                     """
