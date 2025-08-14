@@ -10,10 +10,10 @@ import java.util.List;
 @AllArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
-    private Long memberid;
+    private Long memberId;
 
-    public Long getMemberid() {
-        return memberid;
+    public Long getMemberId() {
+        return memberId;
     }
 
     @Override

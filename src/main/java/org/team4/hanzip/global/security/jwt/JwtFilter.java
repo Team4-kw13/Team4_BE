@@ -29,7 +29,7 @@ public class JwtFilter extends GenericFilterBean {
         if(accessToken != null && jwtProvider.validateToken(accessToken)) {
             Authentication authentication = jwtProvider.getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            if(memberRepository.findById(((CustomUserDetails)authentication.getPrincipal()).getMemberid()).isEmpty()) {
+            if(memberRepository.findById(((CustomUserDetails)authentication.getPrincipal()).getMemberId()).isEmpty()) {
                 HttpServletResponse httpResponse = (HttpServletResponse)servletResponse;
                 httpResponse.setStatus(401);
                 httpResponse.setContentType("application/json");
