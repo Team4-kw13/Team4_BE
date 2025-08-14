@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
 import org.team4.hanzip.domain.member.repository.MemberRepository;
 import org.team4.hanzip.global.security.CustomUserDetails;
 
@@ -18,23 +19,21 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
-public class JwtFilter extends GenericFilterBean {
+public class JwtFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
     private final MemberRepository memberRepository;
 
-
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        String accessToken = resolveToken((HttpServletRequest) servletRequest);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String accessToken = resolveToken(request);
         if(accessToken != null && jwtProvider.validateToken(accessToken)) {
             Authentication authentication = jwtProvider.getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             if(memberRepository.findById(((CustomUserDetails)authentication.getPrincipal()).getMemberId()).isEmpty()) {
-                HttpServletResponse httpResponse = (HttpServletResponse)servletResponse;
-                httpResponse.setStatus(401);
-                httpResponse.setContentType("application/json");
-                httpResponse.setCharacterEncoding("UTF-8");
-                httpResponse.getWriter().write(
+                response.setStatus(401);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(
                         """
                             {
                                 "success": false,
@@ -47,11 +46,10 @@ public class JwtFilter extends GenericFilterBean {
                 return;
             }
         } else {
-            HttpServletResponse httpResponse = (HttpServletResponse)servletResponse;
-            httpResponse.setStatus(401);
-            httpResponse.setContentType("application/json");
-            httpResponse.setCharacterEncoding("UTF-8");
-            httpResponse.getWriter().write(
+            response.setStatus(401);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(
                     """
                         {
                             "success": false,
@@ -64,7 +62,7 @@ public class JwtFilter extends GenericFilterBean {
             return;
         }
 
-        filterChain.doFilter(servletRequest, servletResponse);
+        filterChain.doFilter(request, response);
     }
 
     private String resolveToken(HttpServletRequest request) {
