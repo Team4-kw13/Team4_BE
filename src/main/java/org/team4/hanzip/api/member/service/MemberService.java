@@ -1,8 +1,8 @@
 package org.team4.hanzip.api.member.service;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.team4.hanzip.api.member.dto.LoginRequestDTO;
 import org.team4.hanzip.api.member.dto.LoginResponseDTO;
 import org.team4.hanzip.api.member.dto.SignUpRequestDTO;
