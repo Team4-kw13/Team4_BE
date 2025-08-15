@@ -8,6 +8,7 @@ import org.team4.hanzip.api.member.dto.LoginResponseDTO;
 import org.team4.hanzip.api.member.dto.SignUpRequestDTO;
 import org.team4.hanzip.domain.member.entity.Member;
 import org.team4.hanzip.domain.member.repository.MemberRepository;
+import org.team4.hanzip.global.exception.member.InvalidMemberException;
 import org.team4.hanzip.global.exception.member.MemberAlreadyExistException;
 import org.team4.hanzip.global.exception.member.MemberNotFoundException;
 import org.team4.hanzip.global.security.jwt.JwtProvider;
@@ -43,6 +44,7 @@ public class MemberService {
 
         Member member = memberRepository.findMemberByLoginId(loginId);
         if(member == null) throw new MemberNotFoundException();
+        if(!member.getPassword().equals(password)) throw new InvalidMemberException();
 
         String accessToken = jwtProvider.generateAccessToken(member);
         String refreshToken = jwtProvider.generateRefreshToken(member);
