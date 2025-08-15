@@ -7,4 +7,5 @@ import org.team4.hanzip.domain.member.entity.Member;
 @Repository
 public interface MemberRepository extends JpaRepository<Member,Long> {
 
+    Member findMemberByLoginId(String loginId);
 }
