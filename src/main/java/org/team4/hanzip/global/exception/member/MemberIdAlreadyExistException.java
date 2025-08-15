@@ -5,6 +5,6 @@ import org.team4.hanzip.global.exception.common.CommonException;
 
 public class MemberIdAlreadyExistException extends CommonException {
     public MemberIdAlreadyExistException() {
-        super(ErrorCode.MEMBER_ALREADY_EXIST);
+        super(ErrorCode.MEMBER_ALREADY_EXISTS);
     }
 }
