@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.GenericFilterBean;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.team4.hanzip.domain.member.repository.MemberRepository;
 import org.team4.hanzip.global.security.CustomUserDetails;
@@ -25,6 +24,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+        String path = request.getRequestURI();
+        if (path.equals("/api/member/login") || path.equals("/api/member/signup")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String accessToken = resolveToken(request);
         if(accessToken != null && jwtProvider.validateToken(accessToken)) {
             Authentication authentication = jwtProvider.getAuthentication(accessToken);

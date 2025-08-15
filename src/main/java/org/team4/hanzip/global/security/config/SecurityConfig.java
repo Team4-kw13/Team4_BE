@@ -26,8 +26,10 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll() // 나머지 요청은 인증 필요
+                .authorizeHttpRequests(
+                        auth -> auth
+                        .requestMatchers("/api/member/login", "/api/member/signup").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(
                         jwtFilter,
