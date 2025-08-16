@@ -1,0 +1,11 @@
+package org.team4.hanzip.api.member.dto.login;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
+public class LoginRequestDTO {
+    private String loginId;
+    private String password;
+}
