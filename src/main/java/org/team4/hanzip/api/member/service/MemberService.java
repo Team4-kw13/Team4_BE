@@ -3,9 +3,11 @@ package org.team4.hanzip.api.member.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.team4.hanzip.api.member.dto.LoginRequestDTO;
-import org.team4.hanzip.api.member.dto.LoginResponseDTO;
-import org.team4.hanzip.api.member.dto.SignUpRequestDTO;
+import org.team4.hanzip.api.member.dto.login.LoginRequestDTO;
+import org.team4.hanzip.api.member.dto.login.LoginResponseDTO;
+import org.team4.hanzip.api.member.dto.mypage.MyPageRequestDTO;
+import org.team4.hanzip.api.member.dto.mypage.MyPageResponseDTO;
+import org.team4.hanzip.api.member.dto.signup.SignUpRequestDTO;
 import org.team4.hanzip.domain.member.entity.Member;
 import org.team4.hanzip.domain.member.repository.MemberRepository;
 import org.team4.hanzip.global.exception.member.InvalidMemberException;
@@ -46,5 +48,11 @@ public class MemberService {
                             accessToken,
                             refreshToken
                     );
+    }
+
+    public MyPageResponseDTO myPage(MyPageRequestDTO requestDTO) {
+        Member member = memberRepository.findMemberById(requestDTO.getMemberId());
+        if(member == null) throw new MemberNotFoundException();
+        else return new MyPageResponseDTO(member.getNickname());
     }
 }

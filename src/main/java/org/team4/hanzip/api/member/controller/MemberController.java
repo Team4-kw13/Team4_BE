@@ -2,14 +2,13 @@ package org.team4.hanzip.api.member.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.team4.hanzip.api.member.dto.LoginRequestDTO;
-import org.team4.hanzip.api.member.dto.LoginResponseDTO;
-import org.team4.hanzip.api.member.dto.SignUpRequestDTO;
-import org.team4.hanzip.api.member.dto.SignUpResponseDTO;
+import org.springframework.web.bind.annotation.*;
+import org.team4.hanzip.api.member.dto.login.LoginRequestDTO;
+import org.team4.hanzip.api.member.dto.login.LoginResponseDTO;
+import org.team4.hanzip.api.member.dto.mypage.MyPageRequestDTO;
+import org.team4.hanzip.api.member.dto.mypage.MyPageResponseDTO;
+import org.team4.hanzip.api.member.dto.signup.SignUpRequestDTO;
+import org.team4.hanzip.api.member.dto.signup.SignUpResponseDTO;
 import org.team4.hanzip.api.member.service.MemberService;
 import org.team4.hanzip.domain.member.entity.Member;
 import org.team4.hanzip.global.api.ApiResponse;
@@ -41,6 +40,18 @@ public class MemberController {
     ) {
         LoginResponseDTO body = memberService.login(requestDTO);
         SuccessCode code = SuccessCode.LOGIN_SUCCESS;
+
+        return ResponseEntity
+                .status(code.getStatus())
+                .body(ApiResponse.success(code, body));
+    }
+
+    @GetMapping("/mypage/{memberId}")
+    public ResponseEntity<ApiResponse<MyPageResponseDTO>> myPage(
+            @PathVariable("memberId") final MyPageRequestDTO requestDTO
+    ) {
+        MyPageResponseDTO body = memberService.myPage(requestDTO);
+        SuccessCode code = SuccessCode.GET_MYPAGE_SUCCESS;
 
         return ResponseEntity
                 .status(code.getStatus())
