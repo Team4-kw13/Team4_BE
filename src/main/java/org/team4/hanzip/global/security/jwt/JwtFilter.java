@@ -36,7 +36,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if(accessToken != null && jwtValidator.validateToken(accessToken)) {
             Authentication authentication = jwtProvider.getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            if(memberRepository.findById(((CustomUserDetails)authentication.getPrincipal()).getMemberId()).isEmpty()) {
+            if(memberRepository.findById((Long)authentication.getPrincipal()).isEmpty()) {
                 response.setStatus(401);
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");

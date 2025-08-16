@@ -70,8 +70,8 @@ public class JwtProvider {
                 .parseClaimsJws(accessToken);
         Long memberId = parseLong(claims.getBody().getSubject());
 
-        CustomUserDetails userDetails = new CustomUserDetails(memberId);
-        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+//        CustomUserDetails userDetails = new CustomUserDetails(memberId);
+        return new UsernamePasswordAuthenticationToken(memberId, null, null);
 
     }
 
