@@ -8,4 +8,6 @@ import org.team4.hanzip.domain.member.entity.Member;
 public interface MemberRepository extends JpaRepository<Member,Long> {
 
     Member findMemberByLoginId(String loginId);
+
+    Boolean existsByLoginId(String loginId);
 }

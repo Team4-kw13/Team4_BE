@@ -8,7 +8,7 @@ import lombok.Setter;
 import org.team4.hanzip.global.entity.BaseTimeEntity;
 
 @Entity
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 public class Member extends BaseTimeEntity {
     @Id
@@ -17,7 +17,6 @@ public class Member extends BaseTimeEntity {
     private String nickname;
     @Column(nullable = false, unique = true)
     private String loginId;
-    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
