@@ -21,17 +21,8 @@ public class MemberService {
     private final JwtProvider jwtProvider;
 
     public Member signUp(final SignUpRequestDTO signUpRequestDTO) {
-        String nickname = signUpRequestDTO.getNickname();
-        String loginId = signUpRequestDTO.getLoginId();
-        String password = signUpRequestDTO.getPassword();
-
-        Member member = memberRepository.findMemberByLoginId(loginId);
-        if (member == null) {
-            member = new Member.Builder()
-                    .nickname(nickname)
-                    .loginId(loginId)
-                    .password(password)
-                    .build();
+        Member member = signUpRequestDTO.toEntity();
+        if (memberRepository.existsByLoginId(member.getLoginId())) {
             return memberRepository.save(member);
         } else {
             throw new MemberAlreadyExistException();
