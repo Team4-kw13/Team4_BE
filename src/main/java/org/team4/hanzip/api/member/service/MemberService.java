@@ -22,7 +22,7 @@ public class MemberService {
 
     public Member signUp(final SignUpRequestDTO signUpRequestDTO) {
         Member member = signUpRequestDTO.toEntity();
-        if (memberRepository.existsByLoginId(member.getLoginId())) {
+        if (!memberRepository.existsByLoginId(member.getLoginId())) {
             return memberRepository.save(member);
         } else {
             throw new MemberAlreadyExistException();
