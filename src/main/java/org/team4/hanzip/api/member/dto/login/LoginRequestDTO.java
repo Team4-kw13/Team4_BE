@@ -1,4 +1,4 @@
-package org.team4.hanzip.api.member.dto;
+package org.team4.hanzip.api.member.dto.login;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
