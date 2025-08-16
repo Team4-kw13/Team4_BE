@@ -2,6 +2,7 @@ package org.team4.hanzip.api.member.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.team4.hanzip.api.member.dto.login.LoginRequestDTO;
 import org.team4.hanzip.api.member.dto.login.LoginResponseDTO;
@@ -46,11 +47,11 @@ public class MemberController {
                 .body(ApiResponse.success(code, body));
     }
 
-    @GetMapping("/mypage/{memberId}")
+    @GetMapping("/mypage")
     public ResponseEntity<ApiResponse<MyPageResponseDTO>> myPage(
-            @PathVariable("memberId") final MyPageRequestDTO requestDTO
+            @AuthenticationPrincipal final Long memberId
     ) {
-        MyPageResponseDTO body = memberService.myPage(requestDTO);
+        MyPageResponseDTO body = memberService.myPage(new MyPageRequestDTO(memberId));
         SuccessCode code = SuccessCode.GET_MYPAGE_SUCCESS;
 
         return ResponseEntity
