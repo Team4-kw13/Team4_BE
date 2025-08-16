@@ -20,6 +20,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
+    private final JwtValidator jwtValidator;
     private final MemberRepository memberRepository;
 
     @Override
@@ -32,7 +33,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         String accessToken = resolveToken(request);
-        if(accessToken != null && jwtProvider.validateToken(accessToken)) {
+        if(accessToken != null && jwtValidator.validateToken(accessToken)) {
             Authentication authentication = jwtProvider.getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             if(memberRepository.findById(((CustomUserDetails)authentication.getPrincipal()).getMemberId()).isEmpty()) {

@@ -62,19 +62,6 @@ public class JwtProvider {
                 .compact();
     }
 
-    public Boolean validateToken(String token) {
-        try {
-            Jws<Claims> claims = Jwts.parser()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token);
-
-            return claims.getBody().getExpiration().after(new Date());
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
     public Authentication getAuthentication(String accessToken) {
         Jws<Claims> claims = Jwts
                 .parser()
