@@ -25,6 +25,7 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
     private final JwtValidator jwtValidator;
     private final MemberRepository memberRepository;
+    private final ObjectMapper objectMapper;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -36,7 +37,6 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         String accessToken = jwtValidator.resolveToken(request);
-        ObjectMapper objectMapper = new ObjectMapper();
         if(accessToken != null && jwtValidator.validateToken(accessToken)) {
             Authentication authentication = jwtProvider.getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
