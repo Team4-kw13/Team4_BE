@@ -25,7 +25,8 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     public Member signUp(final SignUpRequestDTO signUpRequestDTO) {
-        Member member = signUpRequestDTO.toEntity();
+        final String encodedPassword = passwordEncoder.encode(signUpRequestDTO.getPassword());
+        Member member = signUpRequestDTO.toEntity(encodedPassword);
         if (!memberRepository.existsByLoginId(member.getLoginId())) {
             return memberRepository.save(member);
         } else {

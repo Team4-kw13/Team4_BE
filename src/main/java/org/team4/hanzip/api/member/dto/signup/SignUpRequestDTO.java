@@ -8,17 +8,15 @@ import org.team4.hanzip.domain.member.entity.Member;
 @AllArgsConstructor
 @Getter
 public class SignUpRequestDTO {
-    private final PasswordEncoder passwordEncoder;
-
     private String nickname;
     private String loginId;
     private String password;
 
-    public Member toEntity() {
+    public Member toEntity(final String encodedPassword) {
         return new Member.Builder()
                 .nickname(this.nickname)
                 .loginId(this.loginId)
-                .password(passwordEncoder.encode(this.password))
+                .password(encodedPassword)
                 .build();
     }
 }
