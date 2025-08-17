@@ -2,11 +2,14 @@ package org.team4.hanzip.api.member.dto.signup;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.team4.hanzip.domain.member.entity.Member;
 
 @AllArgsConstructor
 @Getter
 public class SignUpRequestDTO {
+    private final PasswordEncoder passwordEncoder;
+
     private String nickname;
     private String loginId;
     private String password;
@@ -15,7 +18,7 @@ public class SignUpRequestDTO {
         return new Member.Builder()
                 .nickname(this.nickname)
                 .loginId(this.loginId)
-                .password(this.password)
+                .password(passwordEncoder.encode(this.password))
                 .build();
     }
 }

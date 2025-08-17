@@ -1,6 +1,7 @@
 package org.team4.hanzip.api.member.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.team4.hanzip.api.member.dto.login.LoginRequestDTO;
@@ -21,6 +22,7 @@ import org.team4.hanzip.global.security.jwt.JwtProvider;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final JwtProvider jwtProvider;
+    private final PasswordEncoder passwordEncoder;
 
     public Member signUp(final SignUpRequestDTO signUpRequestDTO) {
         Member member = signUpRequestDTO.toEntity();
@@ -37,7 +39,7 @@ public class MemberService {
 
         Member member = memberRepository.findMemberByLoginId(loginId);
         if(member == null) throw new MemberNotFoundException();
-        if(!member.getPassword().equals(password)) throw new InvalidMemberException();
+        if(!passwordEncoder.matches(password,member.getPassword())) throw new InvalidMemberException();
 
         String accessToken = jwtProvider.generateAccessToken(member);
         String refreshToken = jwtProvider.generateRefreshToken(member);
