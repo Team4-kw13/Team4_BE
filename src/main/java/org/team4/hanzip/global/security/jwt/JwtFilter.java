@@ -3,8 +3,6 @@ package org.team4.hanzip.global.security.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +13,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.team4.hanzip.domain.member.repository.MemberRepository;
 import org.team4.hanzip.global.api.ApiResponse;
 import org.team4.hanzip.global.api.code.member.ErrorCode;
-import org.team4.hanzip.global.security.CustomUserDetails;
 
 import java.io.IOException;
 
