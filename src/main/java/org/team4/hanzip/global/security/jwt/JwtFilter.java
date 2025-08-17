@@ -1,5 +1,6 @@
 package org.team4.hanzip.global.security.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -12,6 +13,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.team4.hanzip.domain.member.repository.MemberRepository;
+import org.team4.hanzip.global.api.ApiResponse;
+import org.team4.hanzip.global.api.code.member.ErrorCode;
 import org.team4.hanzip.global.security.CustomUserDetails;
 
 import java.io.IOException;
@@ -33,39 +36,28 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         String accessToken = jwtValidator.resolveToken(request);
+        ObjectMapper objectMapper = new ObjectMapper();
         if(accessToken != null && jwtValidator.validateToken(accessToken)) {
             Authentication authentication = jwtProvider.getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             if(memberRepository.findById((Long)authentication.getPrincipal()).isEmpty()) {
-                response.setStatus(401);
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
-                response.getWriter().write(
-                        """
-                            {
-                                "success": false,
-                                "statusCode": "401",
-                                "message": "존재하지 않는 유저입니다. 다시 로그인 해주세요",
-                                "data": null
-                            }
-                        """
+                ApiResponse<?> apiResponse = new ApiResponse<>(
+                        ErrorCode.MEMBER_NOT_FOUND.isSuccess(),
+                        ErrorCode.MEMBER_NOT_FOUND.getStatus().value(),
+                        ErrorCode.MEMBER_NOT_FOUND.getMessage(),
+                        null
                 );
+                response.getWriter().write(objectMapper.writeValueAsString(apiResponse));
                 return;
             }
         } else {
-            response.setStatus(401);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(
-                    """
-                        {
-                            "success": false,
-                            "statusCode": "401",
-                            "message": "유효하지 않은 또는 누락된 엑세스 토큰입니다. 다시 로그인 해주세요",
-                            "data": null
-                        }
-                    """
+            ApiResponse<?> apiResponse = new ApiResponse<>(
+                    ErrorCode.INVALID_MEMBER.isSuccess(),
+                    ErrorCode.INVALID_MEMBER.getStatus().value(),
+                    ErrorCode.INVALID_MEMBER.getMessage(),
+                    null
             );
+            response.getWriter().write(objectMapper.writeValueAsString(apiResponse));
             return;
         }
 
