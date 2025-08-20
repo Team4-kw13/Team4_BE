@@ -2,10 +2,7 @@ package org.team4.hanzip.domain.member.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.team4.hanzip.global.entity.BaseTimeEntity;
 
 @Entity
@@ -21,33 +18,40 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private String password;
 
-    private Member(Builder builder) {
-        this.loginId = builder.loginId;
-        this.nickname = builder.nickname;
-        this.password = builder.password;
+    @Builder
+    private Member(String nickname, String loginId, String password) {
+        this.nickname = nickname;
+        this.loginId = loginId;
+        this.password = password;
     }
-    public static class Builder {
-        private String nickname;
-        private String loginId;
-        private String password;
 
-        public Builder nickname(String nickname) {
-            this.nickname = nickname;
-            return this;
-        }
-
-        public Builder loginId(String loginId) {
-            this.loginId = loginId;
-            return this;
-        }
-
-        public Builder password(String password) {
-            this.password = password;
-            return this;
-        }
-
-        public Member build() {
-            return new Member(this);
-        }
-    }
+    //    private Member(Builder builder) {
+//        this.loginId = builder.loginId;
+//        this.nickname = builder.nickname;
+//        this.password = builder.password;
+//    }
+//    public static class Builder {
+//        private String nickname;
+//        private String loginId;
+//        private String password;
+//
+//        public Builder nickname(String nickname) {
+//            this.nickname = nickname;
+//            return this;
+//        }
+//
+//        public Builder loginId(String loginId) {
+//            this.loginId = loginId;
+//            return this;
+//        }
+//
+//        public Builder password(String password) {
+//            this.password = password;
+//            return this;
+//        }
+//
+//        public Member build() {
+//            return new Member(this);
+//        }
+//    }
 }

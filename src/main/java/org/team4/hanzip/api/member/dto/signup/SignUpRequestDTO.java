@@ -1,21 +1,16 @@
 package org.team4.hanzip.api.member.dto.signup;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.team4.hanzip.domain.member.entity.Member;
 
-@AllArgsConstructor
-@Getter
-public class SignUpRequestDTO {
-    private String nickname;
-    private String loginId;
-    private String password;
+public record SignUpRequestDTO(
+     String nickname,
+     String loginId,
+     String password) {
 
     public Member toEntity(final String encodedPassword) {
-        return new Member.Builder()
-                .nickname(this.nickname)
-                .loginId(this.loginId)
+        return Member.builder()
+                .nickname(nickname)
+                .loginId(loginId)
                 .password(encodedPassword)
                 .build();
     }

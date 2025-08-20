@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import org.team4.hanzip.domain.member.entity.Member;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member,Long> {
@@ -14,4 +15,6 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     Boolean existsByLoginId(String loginId);
 
     Member findMemberById(Long id);
+
+    Optional<Member> findByLoginId(String loginId);
 }

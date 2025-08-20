@@ -34,29 +34,21 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         String accessToken = jwtValidator.resolveToken(request);
-        if(accessToken != null && jwtValidator.validateToken(accessToken)) {
-            Authentication authentication = jwtProvider.getAuthentication(accessToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            if(memberRepository.findById((Long)authentication.getPrincipal()).isEmpty()) {
-                ApiResponse<?> apiResponse = new ApiResponse<>(
-                        ErrorCode.MEMBER_NOT_FOUND.isSuccess(),
-                        ErrorCode.MEMBER_NOT_FOUND.getStatus().value(),
-                        ErrorCode.MEMBER_NOT_FOUND.getMessage(),
-                        null
-                );
-                response.getWriter().write(objectMapper.writeValueAsString(apiResponse));
-                return;
-            }
-        } else {
-            ApiResponse<?> apiResponse = new ApiResponse<>(
-                    ErrorCode.INVALID_MEMBER.isSuccess(),
-                    ErrorCode.INVALID_MEMBER.getStatus().value(),
-                    ErrorCode.INVALID_MEMBER.getMessage(),
-                    null
-            );
-            response.getWriter().write(objectMapper.writeValueAsString(apiResponse));
+        if(!(accessToken != null && jwtValidator.validateToken(accessToken))) {
+            response.getWriter().write(objectMapper.writeValueAsString(ErrorCode.INVALID_MEMBER));
             return;
         }
+
+        Authentication authentication = jwtProvider.getAuthentication(accessToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+
+        //
+        if(memberRepository.findById((Long)authentication.getPrincipal()).isEmpty()) {
+            response.getWriter().write(objectMapper.writeValueAsString(ApiResponse.failure(ErrorCode.MEMBER_NOT_FOUND)));
+            return;
+        }
+        //
 
         filterChain.doFilter(request, response);
     }

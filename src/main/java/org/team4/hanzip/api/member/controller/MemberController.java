@@ -1,12 +1,12 @@
 package org.team4.hanzip.api.member.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.team4.hanzip.api.member.dto.login.LoginRequestDTO;
 import org.team4.hanzip.api.member.dto.login.LoginResponseDTO;
-import org.team4.hanzip.api.member.dto.mypage.MyPageRequestDTO;
 import org.team4.hanzip.api.member.dto.mypage.MyPageResponseDTO;
 import org.team4.hanzip.api.member.dto.signup.SignUpRequestDTO;
 import org.team4.hanzip.api.member.dto.signup.SignUpResponseDTO;
@@ -36,7 +36,7 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<LoginResponseDTO>> login(
+    public ResponseEntity<ApiResponse<LoginResponseDTO.UserInfo>> login(
             @RequestBody final LoginRequestDTO requestDTO
     ) {
         LoginResponseDTO body = memberService.login(requestDTO);
@@ -44,14 +44,15 @@ public class MemberController {
 
         return ResponseEntity
                 .status(code.getStatus())
-                .body(ApiResponse.success(code, body));
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + body.accessToken())
+                .body(ApiResponse.success(code, body.userinfo()));
     }
 
     @GetMapping("/mypage")
     public ResponseEntity<ApiResponse<MyPageResponseDTO>> myPage(
             @AuthenticationPrincipal final Long memberId
     ) {
-        MyPageResponseDTO body = memberService.myPage(new MyPageRequestDTO(memberId));
+        MyPageResponseDTO body = memberService.myPage(memberId);
         SuccessCode code = SuccessCode.GET_MYPAGE_SUCCESS;
 
         return ResponseEntity
