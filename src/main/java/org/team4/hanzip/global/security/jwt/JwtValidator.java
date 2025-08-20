@@ -7,10 +7,14 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+
+import static java.lang.Long.parseLong;
 
 @Component
 public class JwtValidator {
@@ -43,5 +47,15 @@ public class JwtValidator {
         } else {
             return null;
         }
+    }
+
+    public Authentication getAuthentication(String accessToken) {
+        Jws<Claims> claims = Jwts
+                .parser()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(accessToken);
+        Long memberId = parseLong(claims.getBody().getSubject());
+        return new UsernamePasswordAuthenticationToken(memberId, null, null);
     }
 }

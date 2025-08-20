@@ -1,11 +1,15 @@
 package org.team4.hanzip.global.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -15,6 +19,8 @@ import org.team4.hanzip.global.api.ApiResponse;
 import org.team4.hanzip.global.api.code.member.ErrorCode;
 
 import java.io.IOException;
+
+import static java.lang.Long.parseLong;
 
 @Component
 @RequiredArgsConstructor
@@ -39,19 +45,9 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        Authentication authentication = jwtProvider.getAuthentication(accessToken);
+        Authentication authentication = jwtValidator.getAuthentication(accessToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-
-        //
-        if(memberRepository.findById((Long)authentication.getPrincipal()).isEmpty()) {
-            response.getWriter().write(objectMapper.writeValueAsString(ApiResponse.failure(ErrorCode.MEMBER_NOT_FOUND)));
-            return;
-        }
-        //
 
         filterChain.doFilter(request, response);
     }
-
-
 }
