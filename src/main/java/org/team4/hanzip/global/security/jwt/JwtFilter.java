@@ -6,10 +6,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.team4.hanzip.global.api.ApiResponse;
 import org.team4.hanzip.global.api.code.member.ErrorCode;
 
 import java.io.IOException;
@@ -31,7 +33,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String accessToken = jwtValidator.resolveToken(request);
         if(!(accessToken != null && jwtValidator.validateToken(accessToken))) {
-            response.getWriter().write(objectMapper.writeValueAsString(ErrorCode.INVALID_MEMBER));
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.getWriter().write(objectMapper.writeValueAsString(ApiResponse.failure(ErrorCode.INVALID_MEMBER)));
             return;
         }
 
