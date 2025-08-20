@@ -1,9 +1,8 @@
 package org.team4.hanzip.global.api;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.team4.hanzip.global.api.code.ErrorResultCode;
 import org.team4.hanzip.global.api.code.SuccessResultCode;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 public record ApiResponse<T>(
 		boolean success,

@@ -1,8 +1,7 @@
 package org.team4.hanzip.global.exception.common;
 
-import org.team4.hanzip.global.api.code.ErrorResultCode;
-
 import lombok.Getter;
+import org.team4.hanzip.global.api.code.ErrorResultCode;
 
 @Getter
 public abstract class CommonException extends RuntimeException {
