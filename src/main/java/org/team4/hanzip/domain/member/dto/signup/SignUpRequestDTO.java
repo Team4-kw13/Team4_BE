@@ -1,4 +1,4 @@
-package org.team4.hanzip.api.member.dto.signup;
+package org.team4.hanzip.domain.member.dto.signup;
 
 import org.team4.hanzip.domain.member.entity.Member;
 

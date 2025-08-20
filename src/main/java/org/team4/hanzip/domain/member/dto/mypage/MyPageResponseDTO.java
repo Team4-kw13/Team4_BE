@@ -1,4 +1,4 @@
-package org.team4.hanzip.api.member.dto.mypage;
+package org.team4.hanzip.domain.member.dto.mypage;
 
 public record MyPageResponseDTO (
     String nickname
