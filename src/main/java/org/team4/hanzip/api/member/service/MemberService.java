@@ -10,8 +10,6 @@ import org.team4.hanzip.api.member.dto.mypage.MyPageResponseDTO;
 import org.team4.hanzip.api.member.dto.signup.SignUpRequestDTO;
 import org.team4.hanzip.domain.member.entity.Member;
 import org.team4.hanzip.domain.member.repository.MemberRepository;
-import org.team4.hanzip.global.api.ApiResponse;
-import org.team4.hanzip.global.api.code.member.ErrorCode;
 import org.team4.hanzip.global.exception.member.InvalidMemberException;
 import org.team4.hanzip.global.exception.member.MemberAlreadyExistException;
 import org.team4.hanzip.global.exception.member.MemberNotFoundException;

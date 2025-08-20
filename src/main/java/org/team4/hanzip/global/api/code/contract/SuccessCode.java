@@ -1,10 +1,9 @@
 package org.team4.hanzip.global.api.code.contract;
 
-import org.springframework.http.HttpStatus;
-import org.team4.hanzip.global.api.code.SuccessResultCode;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.team4.hanzip.global.api.code.SuccessResultCode;
 
 @Getter
 @RequiredArgsConstructor

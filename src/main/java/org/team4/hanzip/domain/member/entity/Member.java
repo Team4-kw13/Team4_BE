@@ -1,8 +1,10 @@
 package org.team4.hanzip.domain.member.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.team4.hanzip.global.entity.BaseTimeEntity;
 
 @Entity
