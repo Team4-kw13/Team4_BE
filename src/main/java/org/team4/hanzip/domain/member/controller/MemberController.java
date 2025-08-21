@@ -70,9 +70,10 @@ public class MemberController {
 	private String setResponseCookie(String refreshToken) {
 		return ResponseCookie.from("refreshToken", refreshToken)
 				.httpOnly(true)
-				.httpOnly(true)
+				.secure(true)
+				.sameSite("None")
 				.path("/")
-				.maxAge(10000)
+				.maxAge(60L * 60 * 24 * 28)
 				.build()
 				.toString();
 	}
