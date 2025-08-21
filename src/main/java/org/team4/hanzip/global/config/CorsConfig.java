@@ -17,7 +17,7 @@ public class CorsConfig {
 
 		corsConfiguration.setAllowCredentials(true);
 
-		corsConfiguration.addAllowedOrigin("http://localhost:3000");
+		corsConfiguration.addAllowedOrigin("https://hanzipmari.vercel.app");
 
 		corsConfiguration.addAllowedMethod(HttpMethod.GET);
 		corsConfiguration.addAllowedMethod(HttpMethod.POST);
