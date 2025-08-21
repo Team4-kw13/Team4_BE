@@ -1,59 +1,46 @@
 package org.team4.hanzip.domain.member.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import org.team4.hanzip.global.entity.BaseTimeEntity;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(
+		name = "member",
+		indexes = {
+				@Index(name = "idx_login_id", columnList = "login_id")
+		}
+)
 public class Member extends BaseTimeEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String nickname;
-    @Column(nullable = false, unique = true)
-    private String loginId;
-    @Column(nullable = false)
-    private String password;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Builder
-    private Member(String nickname, String loginId, String password) {
-        this.nickname = nickname;
-        this.loginId = loginId;
-        this.password = password;
-    }
+	@Column(name = "nickname", nullable = false)
+	private String nickname;
 
-    //    private Member(Builder builder) {
-//        this.loginId = builder.loginId;
-//        this.nickname = builder.nickname;
-//        this.password = builder.password;
-//    }
-//    public static class Builder {
-//        private String nickname;
-//        private String loginId;
-//        private String password;
-//
-//        public Builder nickname(String nickname) {
-//            this.nickname = nickname;
-//            return this;
-//        }
-//
-//        public Builder loginId(String loginId) {
-//            this.loginId = loginId;
-//            return this;
-//        }
-//
-//        public Builder password(String password) {
-//            this.password = password;
-//            return this;
-//        }
-//
-//        public Member build() {
-//            return new Member(this);
-//        }
-//    }
+	@Column(name = "login_id", nullable = false, unique = true)
+	private String loginId;
+
+	@Column(name = "password", nullable = false)
+	private String password;
+
+	@Builder
+	private Member(String nickname, String loginId, String password) {
+		this.nickname = nickname;
+		this.loginId = loginId;
+		this.password = password;
+	}
 }
