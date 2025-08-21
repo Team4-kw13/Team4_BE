@@ -4,7 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.team4.hanzip.global.api.ApiResponse;
-import org.team4.hanzip.global.exception.member.InvalidMemberException;
+import org.team4.hanzip.global.exception.member.InvalidLoginInformationException;
 import org.team4.hanzip.global.exception.member.MemberAlreadyExistException;
 import org.team4.hanzip.global.exception.member.MemberNotFoundException;
 
@@ -15,8 +15,8 @@ public class MemberExceptionHandler extends BaseExceptionHandler {
 		return buildErrorResponse(e.getErrorResultCode());
 	}
 
-	@ExceptionHandler(InvalidMemberException.class)
-	protected ResponseEntity<ApiResponse<Void>> handleInvalidMemberException(InvalidMemberException e) {
+	@ExceptionHandler(InvalidLoginInformationException.class)
+	protected ResponseEntity<ApiResponse<Void>> handleInvalidMemberException(InvalidLoginInformationException e) {
 		return buildErrorResponse(e.getErrorResultCode());
 	}
 

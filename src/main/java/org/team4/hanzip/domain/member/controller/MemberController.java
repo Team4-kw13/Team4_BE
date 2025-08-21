@@ -1,62 +1,79 @@
 package org.team4.hanzip.domain.member.controller;
 
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-import org.team4.hanzip.domain.member.dto.login.LoginRequestDTO;
-import org.team4.hanzip.domain.member.dto.login.LoginResponseDTO;
-import org.team4.hanzip.domain.member.dto.mypage.MyPageResponseDTO;
-import org.team4.hanzip.domain.member.dto.signup.SignUpRequestDTO;
-import org.team4.hanzip.domain.member.dto.signup.SignUpResponseDTO;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.team4.hanzip.domain.member.dto.request.LoginRequestDto;
+import org.team4.hanzip.domain.member.dto.response.MyPageResponseDto;
+import org.team4.hanzip.domain.member.dto.request.SignUpRequestDto;
+import org.team4.hanzip.domain.member.dto.response.TokenResponseDto;
 import org.team4.hanzip.domain.member.service.MemberService;
-import org.team4.hanzip.domain.member.entity.Member;
 import org.team4.hanzip.global.api.ApiResponse;
 import org.team4.hanzip.global.api.code.member.SuccessCode;
 
 @RestController
-@RequestMapping("/api/member")
+@RequestMapping("/api/members")
 @RequiredArgsConstructor
 public class MemberController {
 
-    private final MemberService memberService;
+	private final MemberService memberService;
 
-    @PostMapping("/signup")
-    public ResponseEntity<ApiResponse<SignUpResponseDTO>> signUp(
-            @RequestBody final SignUpRequestDTO requestDTO
-    ) {
-        Member member = memberService.signUp(requestDTO);
-        SignUpResponseDTO body = new SignUpResponseDTO(member.getId(),member.getLoginId(),member.getNickname());
+	@PostMapping("/signup")
+	public ResponseEntity<ApiResponse<Void>> signUp(
+			@RequestBody final SignUpRequestDto signUpRequestDto
+	) {
+		System.out.println("start4");
+		memberService.signUp(signUpRequestDto);
 
-        SuccessCode code = SuccessCode.SIGNUP_SUCCESS;
-        return ResponseEntity
-                .status(code.getStatus())
-                .body(ApiResponse.success(code, body));
-    }
+		return ResponseEntity
+				.status(SuccessCode.SIGNUP_SUCCESS.getStatus())
+				.body(ApiResponse.success(SuccessCode.SIGNUP_SUCCESS));
+	}
 
-    @PostMapping("/login")
-    public ResponseEntity<ApiResponse<LoginResponseDTO.UserInfo>> login(
-            @RequestBody final LoginRequestDTO requestDTO
-    ) {
-        LoginResponseDTO body = memberService.login(requestDTO);
-        SuccessCode code = SuccessCode.LOGIN_SUCCESS;
+	@PostMapping("/login")
+	public ResponseEntity<ApiResponse<Void>> login(
+			@RequestBody final LoginRequestDto loginRequestDto
+	) {
+		return ResponseEntity
+				.status(SuccessCode.LOGIN_SUCCESS.getStatus())
+				.headers(setResponseHeaders(memberService.login(loginRequestDto)))
+				.body(ApiResponse.success(SuccessCode.LOGIN_SUCCESS));
+	}
 
-        return ResponseEntity
-                .status(code.getStatus())
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + body.accessToken())
-                .body(ApiResponse.success(code, body.userinfo()));
-    }
+	@GetMapping("/mypage")
+	public ResponseEntity<ApiResponse<MyPageResponseDto>> getMyPageInfo(
+			@AuthenticationPrincipal final long memberId
+	) {
+		return ResponseEntity
+				.status(SuccessCode.OK.getStatus())
+				.body(ApiResponse.success(SuccessCode.OK, memberService.getMyPageInfo(memberId)));
+	}
 
-    @GetMapping("/mypage")
-    public ResponseEntity<ApiResponse<MyPageResponseDTO>> myPage(
-            @AuthenticationPrincipal final Long memberId
-    ) {
-        MyPageResponseDTO body = memberService.myPage(memberId);
-        SuccessCode code = SuccessCode.GET_MYPAGE_SUCCESS;
+	private HttpHeaders setResponseHeaders(TokenResponseDto tokenResponseDto) {
+		HttpHeaders headers = new HttpHeaders();
 
-        return ResponseEntity
-                .status(code.getStatus())
-                .body(ApiResponse.success(code, body));
-    }
+		headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + tokenResponseDto.accessToken());
+		headers.add(HttpHeaders.SET_COOKIE, setResponseCookie(tokenResponseDto.refreshToken()));
+
+		return headers;
+	}
+
+	private String setResponseCookie(String refreshToken) {
+		return ResponseCookie.from("refreshToken", refreshToken)
+				.httpOnly(true)
+				.httpOnly(true)
+				.path("/")
+				.maxAge(10000)
+				.build()
+				.toString();
+	}
 }

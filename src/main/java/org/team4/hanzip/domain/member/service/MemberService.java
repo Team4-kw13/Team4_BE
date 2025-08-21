@@ -1,16 +1,17 @@
 package org.team4.hanzip.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.team4.hanzip.domain.member.dto.login.LoginRequestDTO;
-import org.team4.hanzip.domain.member.dto.login.LoginResponseDTO;
-import org.team4.hanzip.domain.member.dto.mypage.MyPageResponseDTO;
-import org.team4.hanzip.domain.member.dto.signup.SignUpRequestDTO;
+import org.team4.hanzip.domain.member.dto.request.LoginRequestDto;
+import org.team4.hanzip.domain.member.dto.response.MyPageResponseDto;
+import org.team4.hanzip.domain.member.dto.request.SignUpRequestDto;
+import org.team4.hanzip.domain.member.dto.response.TokenResponseDto;
 import org.team4.hanzip.domain.member.entity.Member;
 import org.team4.hanzip.domain.member.repository.MemberRepository;
-import org.team4.hanzip.global.exception.member.InvalidMemberException;
+import org.team4.hanzip.global.exception.member.InvalidLoginInformationException;
 import org.team4.hanzip.global.exception.member.MemberAlreadyExistException;
 import org.team4.hanzip.global.exception.member.MemberNotFoundException;
 import org.team4.hanzip.global.security.jwt.JwtProvider;
@@ -19,45 +20,35 @@ import org.team4.hanzip.global.security.jwt.JwtProvider;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MemberService {
-    private final MemberRepository memberRepository;
-    private final JwtProvider jwtProvider;
-    private final PasswordEncoder passwordEncoder;
+	private final MemberRepository memberRepository;
+	private final JwtProvider jwtProvider;
+	private final PasswordEncoder passwordEncoder;
 
-    @Transactional
-    public Member signUp(final SignUpRequestDTO signUpRequestDTO) {
-        if (memberRepository.existsByLoginId(signUpRequestDTO.loginId())) {
-            throw new MemberAlreadyExistException();
-        }
-        return memberRepository.save(
-                signUpRequestDTO.toEntity(
-                    passwordEncoder.encode(signUpRequestDTO.password())
-                )
-        );
-    }
+	@Transactional
+	public void signUp(final SignUpRequestDto signUpRequestDTO) {
+		if (memberRepository.existsByLoginId(signUpRequestDTO.loginId())) {
+			throw new MemberAlreadyExistException();
+		}
 
-    public LoginResponseDTO login(LoginRequestDTO requestDTO) {
-        String loginId = requestDTO.loginId();
-        String password = requestDTO.password();
+		memberRepository.save(signUpRequestDTO.toEntity(passwordEncoder));
+	}
 
-        Member member = memberRepository.findByLoginId(loginId).orElseThrow(MemberNotFoundException::new);
-        if(!passwordEncoder.matches(password,member.getPassword())) throw new InvalidMemberException();
+	public TokenResponseDto login(final LoginRequestDto loginRequestDto) {
+		Member member = memberRepository.findMemberByLoginId(loginRequestDto.loginId())
+				.orElseThrow(MemberNotFoundException::new);
 
-        String accessToken = jwtProvider.generateAccessToken(member);
-        String refreshToken = jwtProvider.generateRefreshToken(member);
+		if (!passwordEncoder.matches(loginRequestDto.password(), member.getPassword())) {
+			throw new InvalidLoginInformationException();
+		}
 
-        return new LoginResponseDTO(
-                            accessToken,
-                            refreshToken,
-                            new LoginResponseDTO.UserInfo(
-                                    member.getId(),
-                                    member.getLoginId(),
-                                    member.getNickname()
-                            )
-                    );
-    }
+		return TokenResponseDto.of(
+				jwtProvider.generateAccessToken(member),
+				jwtProvider.generateRefreshToken(member)
+		);
+	}
 
-    public MyPageResponseDTO myPage(Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
-        return new MyPageResponseDTO(member.getNickname());
-    }
+	public MyPageResponseDto getMyPageInfo(final long memberId) {
+		Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+		return MyPageResponseDto.from(member);
+	}
 }

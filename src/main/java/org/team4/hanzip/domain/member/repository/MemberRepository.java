@@ -7,13 +7,12 @@ import org.team4.hanzip.domain.member.entity.Member;
 import java.util.Optional;
 
 @Repository
-public interface MemberRepository extends JpaRepository<Member,Long> {
+public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    Member findMemberByLoginId(String loginId);
+	Optional<Member> findMemberByLoginId(String loginId);
 
-    Boolean existsByLoginId(String loginId);
+	boolean existsById(long memberId);
 
-    Member findMemberById(Long id);
-
-    Optional<Member> findByLoginId(String loginId);
+	boolean existsByLoginId(String loginId);
 }
+
