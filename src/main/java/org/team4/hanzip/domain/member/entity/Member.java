@@ -28,7 +28,7 @@ public class Member extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "nockname", nullable = false)
+	@Column(name = "nickname", nullable = false)
 	private String nickname;
 
 	@Column(name = "login_id", nullable = false, unique = true)
