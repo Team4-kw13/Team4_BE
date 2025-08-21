@@ -3,6 +3,8 @@ package org.team4.hanzip.global.security.util;
 import java.util.Arrays;
 
 import org.springframework.http.HttpMethod;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.util.AntPathMatcher;
 
 import lombok.Getter;
@@ -22,5 +24,11 @@ public enum WhiteList {
 		return Arrays.stream(values())
 				.anyMatch(entry -> pathMatcher.match(entry.path, requestPath)
 						&& entry.method == requestMethod);
+	}
+
+	public static String[] getAllowedMethods() {
+		return Arrays.stream(values())
+				.map(WhiteList::getPath)
+				.toArray(String[]::new);
 	}
 }

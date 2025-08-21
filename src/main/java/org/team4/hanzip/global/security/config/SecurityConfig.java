@@ -15,6 +15,7 @@ import org.team4.hanzip.domain.member.repository.MemberRepository;
 import org.team4.hanzip.global.config.CorsConfig;
 import org.team4.hanzip.global.security.jwt.JwtFilter;
 import org.team4.hanzip.global.security.jwt.JwtProvider;
+import org.team4.hanzip.global.security.util.WhiteList;
 
 import java.security.SecureRandom;
 
@@ -40,7 +41,7 @@ public class SecurityConfig {
 				)
 				.authorizeHttpRequests(
 						auth -> auth
-								.requestMatchers("/**").permitAll()
+								.requestMatchers(WhiteList.getAllowedMethods()).permitAll()
 								.anyRequest().authenticated()
 				)
 				.cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource()))
