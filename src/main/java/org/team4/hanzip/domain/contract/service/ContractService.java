@@ -51,9 +51,9 @@ public class ContractService {
 	}
 
 	public void uploadContractImages(final long memberId, final String contractId, final List<MultipartFile> images) {
-		List<String> urls = imageUploader.upload(memberId, contractId, images);
-
 		Contract contract = contractRepository.findByMemberIdAndId(memberId, contractId).orElseThrow(ContractNotFoundException::new);
+
+		List<String> urls = imageUploader.upload(memberId, contractId, images);
 
 		contract.updateImages(urls);
 
