@@ -22,7 +22,6 @@ public record ContractListDto(
 			LocalDateTime createdDate
 	) {
 		private static ContractListElement from(final Contract contract) {
-			System.out.println(contract.getContractTitle());
 			return new ContractListElement(
 					contract.getId(),
 					contract.getContractTitle(),
