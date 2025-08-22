@@ -6,6 +6,8 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.team4.hanzip.global.api.ApiResponse;
 import org.team4.hanzip.global.api.code.common.ErrorCode;
@@ -29,9 +31,21 @@ public class CommonExceptionHandler extends BaseExceptionHandler {
 		return buildErrorResponse(ErrorCode.INVALID_REQUEST_CONTENT);
 	}
 
+	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
+	protected ResponseEntity<ApiResponse<Void>> handleMethodArgumentTypeMismatchExceptionException(
+			MethodArgumentTypeMismatchException e) {
+		return buildErrorResponse(ErrorCode.MISSING_REQUIRED_PARAMETER);
+	}
+
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	protected ResponseEntity<ApiResponse<Void>> handleMissingServletRequestParameterException(
 			MissingServletRequestParameterException e) {
 		return buildErrorResponse(ErrorCode.MISSING_REQUIRED_PARAMETER);
+	}
+
+	@ExceptionHandler(MaxUploadSizeExceededException.class)
+	protected ResponseEntity<ApiResponse<Void>> handleMaxUploadSizeExceededException(
+			MaxUploadSizeExceededException e) {
+		return buildErrorResponse(ErrorCode.FILE_SIZE_EXCEEDED);
 	}
 }

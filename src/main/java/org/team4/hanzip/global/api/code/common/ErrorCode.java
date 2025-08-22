@@ -11,7 +11,8 @@ public enum ErrorCode implements ErrorResultCode {
 	INVALID_REQUEST_CONTENT(HttpStatus.BAD_REQUEST, "올바르지 않은 요청 데이터입니다."),
 	MISSING_REQUIRED_PARAMETER(HttpStatus.BAD_REQUEST, "필수 요청값이 존재하지 않습니다."),
 	INVALID_REQUEST_PATH(HttpStatus.NOT_FOUND, "올바르지 않은 요청 경로입니다."),
-	INVALID_HTTP_METHOD(HttpStatus.METHOD_NOT_ALLOWED, "올바르지 않은 HTTP 메서드입니다.");
+	INVALID_HTTP_METHOD(HttpStatus.METHOD_NOT_ALLOWED, "올바르지 않은 HTTP 메서드입니다."),
+	FILE_SIZE_EXCEEDED(HttpStatus.PAYLOAD_TOO_LARGE, "파일 용량이 초과되었습니다.");
 
 	private final HttpStatus status;
 	private final String message;
