@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.team4.hanzip.global.exception.contract.FileExtensionNotFoundException;
-import org.team4.hanzip.global.exception.contract.FileNotFoundException;
+import org.team4.hanzip.global.exception.contract.ImageFileNotFoundException;
 import org.team4.hanzip.global.exception.contract.InvalidFileExtensionException;
 
 import lombok.RequiredArgsConstructor;
@@ -47,7 +47,7 @@ public class ImageUploader {
 
 			// 파일 존재 유무 검증
 			if (fileName == null || fileName.isEmpty()) {
-				throw new FileNotFoundException();
+				throw new ImageFileNotFoundException();
 			}
 
 			// 파일 확장자 존재 유무 검증
