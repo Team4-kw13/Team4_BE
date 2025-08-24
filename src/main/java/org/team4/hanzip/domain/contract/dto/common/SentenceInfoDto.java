@@ -9,6 +9,11 @@ public record SentenceInfoDto(
 		String content,
 		List<VertexDto> vertices
 ) {
+	public SentenceInfoDto(String content, List<VertexDto> vertices) {
+		this.content = content;
+		this.vertices = vertices == null ? List.of() : vertices;
+	}
+
 	public SentenceInfo toSentenceInfo() {
 		return SentenceInfo.builder()
 				.content(content)
@@ -23,7 +28,7 @@ public record SentenceInfoDto(
 		);
 	}
 
-	private record VertexDto(int x, int y) {
+	public record VertexDto(int x, int y) {
 		private Vertex toVertex() {
 			return Vertex.builder()
 					.x(x)
@@ -33,10 +38,6 @@ public record SentenceInfoDto(
 
 		private static VertexDto from(Vertex vertex) {
 			return new VertexDto(vertex.getX(), vertex.getY());
-		}
-
-		private static VertexDto of(int x, int y) {
-			return new VertexDto(x, y);
 		}
 	}
 }
