@@ -7,15 +7,15 @@ import org.team4.hanzip.domain.contract.dto.common.HighlightDto;
 import org.team4.hanzip.domain.contract.dto.common.SummaryDto;
 
 public record ContractWriteDto(
-		String contractTitle,
+		String contractName,
 		HighlightDto highlight,
 		List<SummaryDto> commonSummary,
 		List<SummaryDto> warningSummary
 ) {
-	public Contract toDocument(final long memberId){
+	public Contract toDocument(final long memberId) {
 		return Contract.builder()
 				.memberId(memberId)
-				.contractTitle(contractTitle)
+				.contractName(contractName)
 				.highlight(highlight.toDocumentElement())
 				.commonSummary(commonSummary.stream().map(SummaryDto::toDocumentElement).toList())
 				.warningSummary(warningSummary.stream().map(SummaryDto::toDocumentElement).toList())
