@@ -18,13 +18,13 @@ public record ContractListDto(
 
 	private record ContractListElement(
 			String contractId,
-			String contractTitle,
+			String contractName,
 			LocalDateTime createdDate
 	) {
 		private static ContractListElement from(final Contract contract) {
 			return new ContractListElement(
 					contract.getId(),
-					contract.getContractTitle(),
+					contract.getContractName(),
 					contract.getCreatedDate()
 			);
 		}

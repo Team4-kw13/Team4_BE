@@ -22,7 +22,7 @@ public class Contract extends BaseDocument {
 	@Indexed
 	private Long memberId;
 
-	private String contractTitle;
+	private String contractName;
 
 	private List<String> images;
 
@@ -33,10 +33,10 @@ public class Contract extends BaseDocument {
 	private List<Summary> warningSummary;
 
 	@Builder
-	private Contract(Long memberId, String contractTitle, Highlight highlight, List<Summary> commonSummary,
+	private Contract(Long memberId, String contractName, Highlight highlight, List<Summary> commonSummary,
 			List<Summary> warningSummary) {
 		this.memberId = memberId;
-		this.contractTitle = contractTitle;
+		this.contractName = contractName;
 		this.highlight = highlight;
 		this.commonSummary = commonSummary;
 		this.warningSummary = warningSummary;
